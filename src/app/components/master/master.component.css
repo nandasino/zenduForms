@@ -1,0 +1,10 @@
+/* CSS */
+p {
+    font-size: 32px;
+    font-weight: 700;
+    margin-left: 15px;
+  }
+
+.container-fluid {
+    margin-top: 80px;
+}

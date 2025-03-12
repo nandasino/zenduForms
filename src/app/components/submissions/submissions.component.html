@@ -1,0 +1,125 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <div class="search-container">
+              <img src="assets/images/Search.png" class="search-icon" />
+              <input type="text" class="search-input" [(ngModel)]="searchTerm" placeholder="Search..." (ngModelChange)="filterList()" />
+            </div>
+        </div>
+        <div class="col-12 col-md-2">
+            <div class="select-wrapper">
+              <select [(ngModel)]="type" class="type-select" (change)="filterList()">
+                <option value="" hidden>Select Form</option>
+                <option value="">All</option>
+                <option *ngFor="let taskType of taskTypes" [value]="taskType">{{ taskType }}</option>
+              </select>
+              <img src="assets/images/Arrow.png" class="custom-arrow" alt="arrow" />
+            </div>
+        </div>
+        <div class="col-12 col-md-2">
+            <div class="select-wrapper">
+              <select [(ngModel)]="status" class="type-select" (change)="filterList()">
+                <option value="" hidden>Select Status</option>
+                <option value="">All</option>
+                <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+              </select>
+              <img src="assets/images/Arrow.png" class="custom-arrow" alt="arrow" />
+            </div>
+        </div>  
+        <div class="col-12 col-md-2">
+            <div class="input-wrapper">
+              <img src="assets/images/Calendar.png" class="calendar-icon" />
+              <input type="date" [(ngModel)]="selectedDate" class="date-picker" (change)="filterList()"/>
+            </div>
+        </div>
+        <div class="col-12 col-md-3 d-flex justify-content-end align-items-center ml-auto">
+            <div class="btn-group d-flex">
+                <button type="button" class="btn" [ngClass]="currentComponent == 'Map' ? 'btn-primary' : 'btn-light'" (click)="changeTab('Map')">Map</button>
+                <button type="button" class="btn" [ngClass]="currentComponent == 'List' ? 'btn-primary' : 'btn-light'" (click)="changeTab('List')">List</button>
+            </div>
+            <div class="export-wrapper d-flex align-items-center ml-3" (click)="generatePDF()">
+                <img src="assets/images/Download.png" class="export-icon" />
+                <span class="export-text">Export</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12" *ngIf="currentComponent == 'Map'">
+            <div class="row">
+              <div class="col-4">
+                <div class="card-list" (scroll)="onScroll($event)">
+                  <div class="submission-card" *ngFor="let submission of filteredSubmissionList | slice:0:loadedItems">
+                    <div class="card-content" (click)="centerMapToAddress(submission.customer_address)">
+                      <div class="task-header">
+                        <h5>{{ submission.task.title }}</h5>
+                        <div class="status">
+                          <div [ngClass]="submission.status.type">
+                            <span class="ellipse"></span>
+                            {{ submission.status.title }}
+                          </div>
+                        </div>
+                      </div>
+                      <p><span class="greyText">From:</span> {{ submission.from }}</p>
+                      <p><span class="greyText">To:</span> {{ submission.to }}</p>
+                      <p><span class="greyText">Due Date: </span> <span class="orangeText">{{ submission.due_date | date: 'd MMMM' }}</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-8">
+                <google-map height="400px" width="100%" [zoom]="zoom" [center]="center">
+                  <map-marker *ngFor="let position of markerPositions" [position]="position"></map-marker>
+                </google-map>
+              </div>
+            </div>
+          </div>
+          
+        <div class="col-12" *ngIf="currentComponent == 'List'">
+            <table class="table table-responsive">
+                <thead>
+                    <tr role="row">
+                        <th>
+                            <span class="task"><input type="checkbox" (change)="selectAllTasks($event)" />Task</span>
+                        </th>
+                        <th>Status</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Customer Address</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let submission of filteredSubmissionList | paginate: { itemsPerPage: 10, currentPage: p }">
+                        <td>
+                            <input type="checkbox" [(ngModel)]="submission.selected" />
+                            {{submission.task.title}}
+                        </td>
+                        <td class="status">
+                            <div [ngClass]="submission.status.type">
+                                <span class="ellipse"></span>
+                                {{submission.status.title}}
+                            </div>
+                        </td>
+                        <td>{{submission.from}}</td>
+                        <td>{{submission.to}}</td>
+                        <td>{{submission.customer_address}}</td>
+                        <td>{{submission.due_date | date: 'MMM d, h:mm a' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <span>
+                    {{ startIndex }} - {{ endIndex }} of {{ totalSubmissions }} submissions
+                </span>
+                <pagination-controls 
+                    (pageChange)="p = $event" 
+                    previousLabel=""
+                    nextLabel=""
+                >
+                </pagination-controls>     
+            </div>
+        </div>
+    </div>
+</div>
