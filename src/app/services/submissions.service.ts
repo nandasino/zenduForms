@@ -12,7 +12,7 @@ export class SubmissionsService {
   constructor(private http: HttpClient) { }
 
   getSubmissions():Observable<SubmissionModel[]>{
-    return this.http.get<SubmissionModel[]>("http://localhost:3000/data");
+    return this.http.get<SubmissionModel[]>("https://submissions-api.onrender.com/data");
   }
 
 }
