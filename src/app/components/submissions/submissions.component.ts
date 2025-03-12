@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { SubmissionsService } from '../../services/submissions.service';
 import { SubmissionModel } from '../../model/interface/submission.model';
 import { DatePipe } from '@angular/common';
@@ -16,17 +16,17 @@ export class SubmissionsComponent implements OnInit {
     private submissionService: SubmissionsService
   ) {}
 
-  type: string = "";
-  status: string = "";
-  currentComponent: string = "Map";
-  selectedDate: string = "";
-  searchTerm: string = '';
+  type = "";
+  status = "";
+  currentComponent = "Map";
+  selectedDate = "";
+  searchTerm = '';
   submissionList: SubmissionModel[] = [];
   filteredSubmissionList: SubmissionModel[] = [];
-  p: number = 1;
-  itemsPerPage: number = 10;
-  totalSubmissions: number = 0;
-  loadedItems: number = 10;
+  p = 1;
+  itemsPerPage = 10;
+  totalSubmissions = 0;
+  loadedItems = 10;
   geocoder = new google.maps.Geocoder();
   zoom = 12;
   markerPositions: google.maps.LatLngLiteral[] = [];
@@ -110,20 +110,21 @@ export class SubmissionsComponent implements OnInit {
     this.currentComponent = tabName;
   }
 
-  selectAllTasks(event: any) {
-    const isChecked = event.target.checked;
+  selectAllTasks(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const isChecked = target?.checked;
     this.submissionList.forEach(submission => {
-      submission.selected = isChecked;
+      submission.selected = isChecked ?? false;
     });
   }
-
+  
   @HostListener("window:scroll", ["$event"])
-  onScroll(event: any) {
-    const element = event.target;
-    if (element.offsetHeight + element.scrollTop >= element.scrollHeight) {
+  onScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    if (element && element.offsetHeight + element.scrollTop >= element.scrollHeight) {
       this.loadMore();
     }
-  }
+  }  
 
   loadMore() {
     if (this.loadedItems < this.submissionList.length) {
