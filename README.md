@@ -26,8 +26,8 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 ## Notes
-`Map/List Toggle: The toggle button switches between Map and List views.`
-`Markers on Map: Markers are displayed on the Google Maps map based on the addresses of the submissions. When a submission card is clicked, the map is directed to that card's address.`
-`Export Button: The "Export" button generates a PDF with the filtered submissions.`
-`Date Picker: The date picker component selects dates and filters submissions by the selected date, considering the day, month, and year, disregarding the time.`
-`Selects: The options are dynamic, retrieving each unique occurrence from the list of submissions. When an option is selected, the list is filtered accordingly.`
+Map/List Toggle: The toggle button switches between Map and List views. <br/>
+Markers on Map: Markers are displayed on the Google Maps map based on the addresses of the submissions. When a submission card is clicked, the map is directed to that card's address.<br/>
+Export Button: The "Export" button generates a PDF with the filtered submissions.<br/>
+Date Picker: The date picker component selects dates and filters submissions by the selected date, considering the day, month, and year, disregarding the time.<br/>
+Selects: The options are dynamic, retrieving each unique occurrence from the list of submissions. When an option is selected, the list is filtered accordingly.
